@@ -1,1 +1,1 @@
-# -inspire-eke
+# A containerised webapp orchestrated with Aamazon EKS
