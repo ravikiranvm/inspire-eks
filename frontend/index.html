@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <title>Inspire</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <h1 id="quote"></h1>
+
+        <script>
+            fetch('http://localhost:5001/quote')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('quote').innerText = data.quote;
+                })
+                .catch(error => {
+                    console.error('Error fetching a quote', error)});
+        </script>
+    </body>
+</html>

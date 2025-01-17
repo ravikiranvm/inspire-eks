@@ -1,0 +1,30 @@
+version: "1"
+services:
+  inspire-frontend:
+    build:
+      context: ./frontend
+    #container_name: inspire-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - inspire-backend
+    networks:
+      - inspire-network
+    volumes:
+      - ~/.aws:/root/.aws
+
+  inspire-backend:
+    build:
+      context: ./backend
+    #container_name: inspire-backend
+    ports:
+      - "5001:5001"
+    networks:
+      - inspire-network
+    volumes:
+      - ~/.aws:/root/.aws
+
+networks:
+  inspire-network:
+    driver: bridge
+  
