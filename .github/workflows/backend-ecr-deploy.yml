@@ -1,0 +1,30 @@
+name: Backend build and push to backend-repo
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    name: Build and push the backend Docker image to backend repo in ECR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Login to Amazon EECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build the backend Docker image
+        run: docker build -t backend-repo:latest ./backend
+
+      - name: Tag the backend Docker image
+        run: docker tag backend-repo:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/backend-repo:latest
+
+      - name: Push the backend Docker image to ECR
+        run: docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/backend-repo:latest

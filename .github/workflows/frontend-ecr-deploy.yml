@@ -1,0 +1,30 @@
+name: Frontend build and push to frontend-repo
+
+on:
+  push:
+    paths:
+      - 'frontend/**'
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    name: Build and push the frontend Docker image to frontend repo in ECR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Login to Amazon EECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build the frontend Docker image
+        run: docker build -t frontend-repo:latest ./frontend
+
+      - name: Tag the frontend Docker image
+        run: docker tag frontend-repo:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/frontend-repo:latest
+
+      - name: Push the frontend Docker image to ECR
+        run: docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/frontend-repo:latest
