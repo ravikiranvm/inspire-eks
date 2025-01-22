@@ -1,0 +1,83 @@
+# Backend Deployment
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-api-deployment
+  labels:
+    app: flask-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-api
+  template:
+    metadata:
+      labels:
+        app: flask-api
+    spec:
+      containers:
+        - name: flask-api
+          image: 586794450066.dkr.ecr.us-east-1.amazonaws.com/backend-repo:latest
+          ports:
+            - containerPort: 5001
+
+---
+
+# Backend Service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: flask-api
+  ports:
+    - protocol: TCP
+      port: 5001
+      targetPort: 5001
+  type: LoadBalancer
+
+--- 
+
+# Frontend Deployment
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  labels:
+    app: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: 586794450066.dkr.ecr.us-east-1.amazonaws.com/frontend-repo
+          ports:
+            - containerPort: 80
+
+--- 
+
+# Frontend Service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
