@@ -19,7 +19,7 @@ The **Inspire** is a cloud-native application designed to display random inspira
 ---
 
 ## Architecture Diagram
-
+![alt text](<Architecture Diagram.png>)
 
 ---
 
