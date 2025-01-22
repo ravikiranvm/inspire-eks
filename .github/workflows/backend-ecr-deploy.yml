@@ -6,6 +6,7 @@ on:
       - 'backend/**'
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build-and-push:
@@ -19,8 +20,10 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-        with:
-          region: ${{ secrets.AWS_REGION }}
+        env:
+          AWS_REGION: us-east-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Build the backend Docker image
         run: docker buildx build --platform linux/amd64 -t backend-repo:latest ./backend
